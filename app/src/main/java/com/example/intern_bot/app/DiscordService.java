@@ -13,6 +13,9 @@ public class DiscordService {
     @Value("${DiscordToken}")
     String token;
 
+    @Autowired
+    SchedulerService schedulerService;
+
     @PostConstruct
     void init() {
         this.jda = JDABuilder
