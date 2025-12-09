@@ -1,14 +1,20 @@
 package com.example.intern_bot.app;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class Cache {
-    private final Set<Integer> cache = new HashSet<>();
+
+    private final StringRedisTemplate redisTemplate;
+    private static final String KEY = "seen_jobs";
+
+    public Cache(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public boolean isNew(String url) {
-        return cache.add(hash);
+        Long added = redisTemplate.opsForSet().add(KEY, url);
+        return added != null && added > 0;
     }
 }

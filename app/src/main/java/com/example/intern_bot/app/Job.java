@@ -2,7 +2,6 @@ package com.example.intern_bot.app;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import java.util.Date;
 
 @Data

@@ -13,7 +13,7 @@ public class Scheduler {
     private final DiscordService bot;
     private final Cache cache;
 
-    @Value("${Channel}")
+    @Value("${discord.channel}")
     private String channelId;
 
     public Scheduler(Scraper scraper, DiscordService bot, Cache cache) {
@@ -22,14 +22,14 @@ public class Scheduler {
         this.cache = cache;
     }
 
-    @Scheduled(fixedRateString = 3600)
+    @Scheduled(fixedRateString = "#{${app.interval} * 60000}")
     public void run() {
         List<Job> jobs = scraper.fetchJobs();
-        jobs.sort(Comparator.comparing(Job::getPostedDate).reversed());
+        jobs.sort(Comparator.comparing(Job::getPostedDate));
 
         for (Job job : jobs) {
             if (cache.isNew(job.getUrl())) {
-                bot.sendMessage(channelId, job.getTitle() + " - " + job.getCompany() + " - " + job.getUrl());
+                bot.sendMessage(channelId, job.getTitle() + " - " + job.getCompany() + "\n" + job.getUrl());
             }
         }
     }
